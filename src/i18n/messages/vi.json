@@ -457,5 +457,10 @@
     "learning.streakcelebration.factoidb": "Người dùng học {streak_length} ngày liên tiếp {bolded_section} so với những người không học.",
     "learning.streakCelebration.streakCelebrationCouponEndDateMessage": "Kết thúc {date}",
     "learning.loading.failure": "Có lỗi xảy ra khi tải khóa học",
-    "learning.loading": "Đang tải trang khóa học ..."
+    "learning.loading": "Đang tải trang khóa học ...",
+    "learnerVariantDashboard.menu.dashboard.label": "Bảng thông tin",
+    "learnerVariantDashboard.help.label": "Trợ giúp",
+    "learnerVariantDashboard.menu.profile.label": "Hồ sơ",
+    "learnerVariantDashboard.menu.account.label": "Tài khoản",
+    "learnerVariantDashboard.menu.signOut.label": "Đăng xuất"
 }

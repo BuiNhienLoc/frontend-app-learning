@@ -21,6 +21,8 @@ class MasqueradeWidget extends Component {
     this.courseId = props.courseId;
     this.state = {
       autoFocus: false,
+      // <TO BE MODIFIED>
+      // masquerade: 'Staff',
       masquerade: 'Giảng viên',
       options: [],
       shouldShowUserNameInput: false,
@@ -71,7 +73,9 @@ class MasqueradeWidget extends Component {
   toggle(show) {
     this.setState(prevState => ({
       autoFocus: true,
-      masquerade: 'Học viên cụ thể',
+      // <TO BE MODIFIED>
+      // masquerade: 'Specific Student...',
+      masquerade: 'Học viên cụ thể...',
       shouldShowUserNameInput: show === undefined ? !prevState.shouldShowUserNameInput : show,
     }));
   }
@@ -96,7 +100,9 @@ class MasqueradeWidget extends Component {
     if (active.userName) {
       this.setState({
         autoFocus: false,
-        masquerade: 'Specific Student...',
+        // <TO BE MODIFIED>
+        // masquerade: 'Specific Student...',
+        masquerade: 'Học viên cụ thể...',
         masqueradeUsername: active.userName,
         shouldShowUserNameInput: true,
       });

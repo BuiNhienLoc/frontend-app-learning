@@ -126,7 +126,7 @@ class MasqueradeWidget extends Component {
     return (
       <div className="flex-grow-1">
         <div className="row">
-          <span className="col-auto col-form-label pl-3">Xem khóa học này như</span>
+          <span className="col-auto col-form-label pl-3">Xem khóa học này như:</span>
           <Dropdown className="flex-shrink-1 mx-1">
             <Dropdown.Toggle variant="inverse-outline-primary">
               {masquerade}

@@ -462,5 +462,10 @@
     "learnerVariantDashboard.help.label": "Trợ giúp",
     "learnerVariantDashboard.menu.profile.label": "Hồ sơ",
     "learnerVariantDashboard.menu.account.label": "Tài khoản",
-    "learnerVariantDashboard.menu.signOut.label": "Đăng xuất"
+    "learnerVariantDashboard.menu.signOut.label": "Đăng xuất",
+    "header.menu.dashboard.label": "Bảng thông tin",
+    "header.help.label": "Trợ giúp",
+    "header.menu.profile.label": "Hồ sơ",
+    "header.menu.account.label": "Tài khoản",
+    "header.menu.signOut.label": "Đăng xuất"
 }

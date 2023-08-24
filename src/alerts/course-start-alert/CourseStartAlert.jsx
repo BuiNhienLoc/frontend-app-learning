@@ -71,7 +71,7 @@ const CourseStartAlert = ({ payload }) => {
           id="learning.outline.alert.end.long"
           // <TO BE MODIFIED>
           // defaultMessage="Course starts {timeRemaining} on {courseStartDate}."
-          defaultMessage="Khóa học bắt đầu sau {timeRemaining} vào {courseStartDate}."
+          defaultMessage="Khóa học bắt đầu {timeRemaining} vào {courseStartDate}."
           description="Used when the time remaining is more than a day away."
           values={{
             courseStartDate: (

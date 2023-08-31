@@ -23,8 +23,8 @@ class MasqueradeWidget extends Component {
       autoFocus: false,
       // <TO BE MODIFIED>
       // masquerade: 'Staff',
-      masquerade: 'Giảng viên',
-      options: [],
+      masquerade: 'Nhân viên',
+      options: ["Nhân viên", "Người học cụ thể...", "Dự thính"],
       shouldShowUserNameInput: false,
       masqueradeUsername: null,
     };
@@ -75,7 +75,7 @@ class MasqueradeWidget extends Component {
       autoFocus: true,
       // <TO BE MODIFIED>
       // masquerade: 'Specific Student...',
-      masquerade: 'Học viên cụ thể...',
+      masquerade: 'Người học cụ thể...',
       shouldShowUserNameInput: show === undefined ? !prevState.shouldShowUserNameInput : show,
     }));
   }
@@ -102,7 +102,7 @@ class MasqueradeWidget extends Component {
         autoFocus: false,
         // <TO BE MODIFIED>
         // masquerade: 'Specific Student...',
-        masquerade: 'Học viên cụ thể...',
+        masquerade: 'Người học cụ thể...',
         masqueradeUsername: active.userName,
         shouldShowUserNameInput: true,
       });

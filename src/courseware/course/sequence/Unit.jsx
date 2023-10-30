@@ -15,24 +15,20 @@ import { fetchCourse } from '../../data';
 import BookmarkButton from '../bookmark/BookmarkButton';
 import ShareButton from '../share/ShareButton';
 import messages from './messages';
-
 const HonorCode = React.lazy(() => import('./honor-code'));
 const LockPaywall = React.lazy(() => import('./lock-paywall'));
-
 /**
  * Feature policy for iframe, allowing access to certain courseware-related media.
  *
  * We must use the wildcard (*) origin for each feature, as courseware content
  * may be embedded in external iframes. Notably, xblock-lti-consumer is a popular
  * block that iframes external course content.
-
  * This policy was selected in conference with the edX Security Working Group.
  * Changes to it should be vetted by them (security@edx.org).
  */
 const IFRAME_FEATURE_POLICY = (
   'microphone *; camera *; midi *; geolocation *; encrypted-media *'
 );
-
 /**
  * We discovered an error in Firefox where - upon iframe load - React would cease to call any
  * useEffect hooks until the user interacts with the page again.  This is particularly confusing
@@ -64,7 +60,6 @@ function useLoadBearingHook(id) {
     setValue(currentValue => currentValue + 1);
   }, [id]);
 }
-
 export function sendUrlHashToFrame(frame) {
   const { hash } = window.location;
   if (hash) {
@@ -73,7 +68,6 @@ export function sendUrlHashToFrame(frame) {
     frame.contentWindow.postMessage({ hashName: hash }, `${getConfig().LMS_BASE_URL}`);
   }
 }
-
 const Unit = ({
   courseId,
   format,
@@ -87,12 +81,12 @@ const Unit = ({
   if (format) {
     iframeUrl += `&format=${format}`;
   }
-
   const [iframeHeight, setIframeHeight] = useState(0);
   const [hasLoaded, setHasLoaded] = useState(false);
   const [showError, setShowError] = useState(false);
   const [modalOptions, setModalOptions] = useState({ open: false });
   const [shouldDisplayHonorCode, setShouldDisplayHonorCode] = useState(false);
+  const [windowTopOffset, setWindowTopOffset] = useState(null);
 
   const unit = useModel('units', id);
   const course = useModel('coursewareMeta', courseId);
@@ -100,11 +94,9 @@ const Unit = ({
     contentTypeGatingEnabled,
     userNeedsIntegritySignature,
   } = course;
-
   const dispatch = useDispatch();
   // Do not remove this hook.  See function description.
   useLoadBearingHook(id);
-
   useEffect(() => {
     if (userNeedsIntegritySignature && unit.graded) {
       setShouldDisplayHonorCode(true);
@@ -112,7 +104,6 @@ const Unit = ({
       setShouldDisplayHonorCode(false);
     }
   }, [userNeedsIntegritySignature]);
-
   const receiveMessage = useCallback(({ data }) => {
     const {
       type,
@@ -120,6 +111,13 @@ const Unit = ({
     } = data;
     if (type === 'plugin.resize') {
       setIframeHeight(payload.height);
+
+      // We observe exit from the video xblock full screen mode
+      // and do page scroll to the previously saved scroll position
+      if (windowTopOffset !== null) {
+        window.scrollTo(0, Number(windowTopOffset));
+      }
+
       if (!hasLoaded && iframeHeight === 0 && payload.height > 0) {
         setHasLoaded(true);
         if (onLoaded) {
@@ -129,17 +127,20 @@ const Unit = ({
     } else if (type === 'plugin.modal') {
       payload.open = true;
       setModalOptions(payload);
+    } else if (type === 'plugin.videoFullScreen') {
+      // We listen for this message from LMS to know when we need to
+      // save or reset scroll position on toggle video xblock full screen mode.
+      setWindowTopOffset(payload.open ? window.scrollY : null);
     } else if (data.offset) {
       // We listen for this message from LMS to know when the page needs to
       // be scrolled to another location on the page.
       window.scrollTo(0, data.offset + document.getElementById('unit-iframe').offsetTop);
     }
-  }, [id, setIframeHeight, hasLoaded, iframeHeight, setHasLoaded, onLoaded]);
+  }, [id, setIframeHeight, hasLoaded, iframeHeight, setHasLoaded, onLoaded, setWindowTopOffset, windowTopOffset]);
   useEventListener('message', receiveMessage);
   useEffect(() => {
     sendUrlHashToFrame(document.getElementById('unit-iframe'));
   }, [id, setIframeHeight, hasLoaded, iframeHeight, setHasLoaded, onLoaded]);
-
   return (
     <div className="unit">
       <h1 className="mb-0 h3">{unit.title}</h1>
@@ -227,7 +228,6 @@ const Unit = ({
               if (!hasLoaded) {
                 setShowError(true);
               }
-
               window.onmessage = (e) => {
                 if (e.data.event_name) {
                   dispatch(processEvent(e.data, fetchCourse));
@@ -240,7 +240,6 @@ const Unit = ({
     </div>
   );
 };
-
 Unit.propTypes = {
   courseId: PropTypes.string.isRequired,
   format: PropTypes.string,
@@ -248,10 +247,8 @@ Unit.propTypes = {
   intl: intlShape.isRequired,
   onLoaded: PropTypes.func,
 };
-
 Unit.defaultProps = {
   format: null,
   onLoaded: undefined,
 };
-
 export default injectIntl(Unit);
